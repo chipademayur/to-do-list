@@ -1,79 +1,92 @@
-/* styles.css */
+/* General Styling */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-}
-
-h1 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.input-container {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-#taskInput {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-#addTaskButton {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#addTaskButton:hover {
-    background-color: #218838;
-}
-
-#taskList {
-    list-style-type: none;
-    padding: 0;
-}
-
-#taskList li {
-    background: #f8f9fa;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 4px;
+/* Navbar Styling */
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
 }
 
-.deleteButton {
-    background: #dc3545;
-    color: white;
+.navbar .logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.navbar .nav-buttons button {
+    background-color: white;
+    color: #007bff;
     border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
+    padding: 8px 15px;
+    margin-left: 10px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.deleteButton:hover {
-    background: #c82333;
+.navbar .nav-buttons button:hover {
+    background-color: #f1f1f1;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed; /* Make the footer fixed */
+    bottom: 0; /* Stick to the bottom of the viewport */
+    left: 0;
+    width: 100%; /* Ensure it spans the entire width */
+    z-index: 1000; /* Keep it above other content */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for aesthetics */
+}
+
+/* Table Container */
+.table-container {
+    border:1px solid black;
+    margin: 20px auto;
+    width: 80%;
+}
+td, th {
+    width: 300px;
+    border: 1px solid #e56161;
+    text-align: left;
+    padding: 8px;
+  }
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }

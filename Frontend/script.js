@@ -1,6 +1,64 @@
 const API_URL = 'http://localhost:3000/api/tasks';
+const paginationControls = document.getElementById('paginationControls');
+const dataTable = document.getElementById('dataTable').querySelector('tbody');
+let tableData = [];
+let currentPage = 1;
+let rowsPerPage = 5;
 
-document.getElementById('addTaskButton').addEventListener('click', async function() {
+// Fetch tasks and populate table
+async function fetchTasks() {
+    try {
+        const response = await fetch(API_URL);
+        tableData = await response.json();
+        renderTable();
+        renderPagination();
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+    }
+}
+
+// Render table rows
+function renderTable() {
+    dataTable.innerHTML = '';
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedData = tableData.slice(start, end);
+
+    paginatedData.forEach((task, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${start + index + 1}</td>
+            <td>${task.id}</td>
+            <td>${task.task}</td>
+            <td>${task.task_status || 'To-Do'}</td>
+            <td>
+                <button class="deleteButton" onclick="deleteTask(${task.id})">Delete</button>
+            </td>
+        `;
+        dataTable.appendChild(row);
+    });
+}
+
+// Render pagination controls
+function renderPagination() {
+    paginationControls.innerHTML = '';
+    const totalPages = Math.ceil(tableData.length / rowsPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i;
+        button.className = i === currentPage ? 'active' : '';
+        button.addEventListener('click', () => {
+            currentPage = i;
+            renderTable();
+            renderPagination();
+        });
+        paginationControls.appendChild(button);
+    }
+}
+
+// Add task
+document.getElementById('addTaskButton').addEventListener('click', async function () {
     const taskInput = document.getElementById('taskInput');
     const taskText = taskInput.value.trim();
 
@@ -13,47 +71,29 @@ document.getElementById('addTaskButton').addEventListener('click', async functio
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ task: taskText })
+            body: JSON.stringify({ task: taskText }),
         });
         const newTask = await response.json();
-        displayTask(newTask);
+        tableData.push(newTask);
         taskInput.value = '';
+        renderTable();
+        renderPagination();
     } catch (error) {
         console.error('Error adding task:', error);
     }
 });
 
-async function fetchTasks() {
+// Delete task
+async function deleteTask(taskId) {
     try {
-        const response = await fetch(API_URL);
-        const tasks = await response.json();
-        tasks.forEach(displayTask);
+        await fetch(`${API_URL}/${taskId}`, { method: 'DELETE' });
+        tableData = tableData.filter(task => task.id !== taskId);
+        renderTable();
+        renderPagination();
     } catch (error) {
-        console.error('Error fetching tasks:', error);
+        console.error('Error deleting task:', error);
     }
 }
 
-function displayTask(task) {
-    const taskList = document.getElementById('taskList');
-    const li = document.createElement('li');
-    li.textContent = task.task;
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.className = 'deleteButton';
-
-    deleteButton.addEventListener('click', async function() {
-        try {
-            await fetch(`${API_URL}/${task.id}`, { method: 'DELETE' });
-            taskList.removeChild(li);
-        } catch (error) {
-            console.error('Error deleting task:', error);
-        }
-    });
-
-    li.appendChild(deleteButton);
-    taskList.appendChild(li);
-}
-
-// Fetch tasks when the page loads
+// Initialize
 fetchTasks();

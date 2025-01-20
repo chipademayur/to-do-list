@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">LOGO</div>
+        <div class="nav-buttons">
+            <button id="homeButton">Home</button>
+            <button id="userButton">User</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
     <div class="container">
         <h1>To-Do List</h1>
         <div class="input-container">
@@ -15,6 +25,34 @@
         </div>
         <ul id="taskList"></ul>
     </div>
+
+    <!-- Table with Pagination -->
+    <div class="table-container">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Task ID</th>
+                    <th>Task Name</th>
+                    <th>Task Status</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically added -->
+            </tbody>
+        </table>
+        <!-- Pagination Controls -->
+        <div class="pagination" id="paginationControls">
+            <!-- Buttons will be dynamically generated -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Created by Mayur Chipade</p>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
