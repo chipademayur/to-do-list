@@ -26,17 +26,29 @@ function renderTable() {
 
     paginatedData.forEach((task, index) => {
         const row = document.createElement('tr');
+        
+        // Table rows with task data
         row.innerHTML = `
             <td>${start + index + 1}</td>
             <td>${task.id}</td>
             <td>${task.task}</td>
             <td>${task.task_status || 'To-Do'}</td>
             <td>
+                <!-- Dynamically created Toggle Button -->
+                <button class="toggleButton ${task.task_status || 'to-do'}" onclick="toggleTaskStatus(${task.id}, '${task.task_status || 'to-do'}')">
+                    ${capitalizeStatus(task.task_status || 'to-do')}
+                </button>
                 <button class="deleteButton" onclick="deleteTask(${task.id})">Delete</button>
             </td>
         `;
+        
         dataTable.appendChild(row);
     });
+}
+
+// Capitalize status text
+function capitalizeStatus(status) {
+    return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
 // Render pagination controls
@@ -92,6 +104,43 @@ async function deleteTask(taskId) {
         renderPagination();
     } catch (error) {
         console.error('Error deleting task:', error);
+    }
+}
+
+// Toggle task status
+async function toggleTaskStatus(taskId, currentStatus) {
+    const statusOrder = ['To-Do', 'processing', 'done'];
+    let newStatus = '';
+
+    // Determine the new status based on the current one
+    const currentIndex = statusOrder.indexOf(currentStatus);
+    newStatus = statusOrder[(currentIndex + 1) % statusOrder.length];
+
+    try {
+        // Send PATCH request to update the task status
+        const response = await fetch(`${API_URL}/toggle-status/${taskId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus }),
+        });
+
+        if (!response.ok) {
+            console.error('Error updating task status:', await response.text());
+            return;
+        }
+
+        // Update the status in the tableData array immediately
+        const updatedTask = await response.json();
+        const taskIndex = tableData.findIndex(task => task.id === taskId);
+        if (taskIndex !== -1) {
+            tableData[taskIndex].task_status = updatedTask.status;  // Update status
+        }
+
+        // Re-render the table to show updated status
+        renderTable();
+        renderPagination();
+    } catch (error) {
+        console.error('Error updating task status:', error);
     }
 }
 

@@ -34,7 +34,7 @@ router.patch('/tasks/toggle-status/:id', (req, res) => {
     const { status } = req.body;
 
     // Validate the status value
-    if (!['to-do', 'processing', 'done'].includes(status)) {
+    if (!['To-Do', 'processing', 'done'].includes(status)) {
         return res.status(400).json({ message: 'Invalid status value' });
     }
 

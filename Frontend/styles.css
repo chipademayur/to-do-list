@@ -64,6 +64,9 @@ td, th {
     text-align: left;
     padding: 8px;
   }
+  table th {
+    background-color: #fbe786;
+  }
 
 /* Pagination Styling */
 .pagination {
@@ -89,4 +92,25 @@ td, th {
 .pagination button.disabled {
     pointer-events: none;
     opacity: 0.5;
+}
+.todo {
+    background-color: rgb(251, 128, 128);
+}
+
+.processing {
+    background-color: rgb(249, 243, 82);
+}
+
+.done {
+    background-color: rgb(5, 129, 5);
+}   
+.toggle-button {
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+#addTaskButton:hover {
+    background-color: #218838;
 }
